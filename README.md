@@ -7,6 +7,7 @@ Tweaks and improvements for an Xcode Discord rich presence.
 **This project is a fork** for adding tweaks and improvements to the original project.
 
 ## Improvements
+uhhhhhhhh
 
 ## Installation
 Open ZIP in xcode, change signing to run locally, and build/run the app.
