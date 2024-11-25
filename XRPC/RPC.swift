@@ -136,8 +136,11 @@ class RPC: ObservableObject, SwordRPCDelegate {
             // Xcode is in a working state
             
             if let ws = xcodeState.workspace {
-                // Set workspace details
-                presence.details = "In \(ws)"
+                // Set workspace details, add custom descriptions to the switch cases
+                switch ws.lowercased() {
+                    case "devices": presence.details = "Managing Devices"
+                    default: presence.details = "In \(ws)"
+                }
             }
             
             if xcodeState.isIdle {
