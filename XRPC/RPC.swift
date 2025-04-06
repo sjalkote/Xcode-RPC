@@ -21,6 +21,9 @@ class RPC: ObservableObject, SwordRPCDelegate {
     // Variable to track if the app is paused
     var isPaused = false
     
+    // Variable to track if the project name should be shown
+    var showProjectName = false
+    
     // SwordRPC instance
     var rpc = SwordRPC(appId: RPC_CLIENT_ID)
     
@@ -40,6 +43,11 @@ class RPC: ObservableObject, SwordRPCDelegate {
     // Method to toggle pause/resume state
     func togglePauseResume() {
         isPaused.toggle()
+    }
+    
+    // Method to toggle project name visibility
+    func toggleProjectName() {
+        showProjectName.toggle()
     }
     
     // Function to perform initial check and connect RPC
@@ -135,12 +143,17 @@ class RPC: ObservableObject, SwordRPCDelegate {
         case .working(let xcodeState):
             // Xcode is in a working state
             
-            if let ws = xcodeState.workspace {
-                // Set workspace details, add custom descriptions to the switch cases
-                switch ws.lowercased() {
+            if showProjectName {
+                if let ws = xcodeState.workspace {
+                    // Set workspace details, add custom descriptions to the switch cases
+                    switch ws.lowercased() {
                     case "devices": presence.details = "Managing Devices"
                     default: presence.details = "In \(ws)"
+                    }
                 }
+            } else {
+                // not sure what to show when hiding project name
+                presence.details = "Locked In"
             }
             
             if xcodeState.isIdle {
@@ -151,11 +164,14 @@ class RPC: ObservableObject, SwordRPCDelegate {
             } else {
                 // Set active state
                 if let filename = xcodeState.fileName {
-                    if xcodeState.isEditingFile {
-                        presence.state = "Editing \(filename)"
-                    } else {
-                        presence.state = "Viewing \(filename)"
-                    }
+//                    if xcodeState.isEditingFile {
+//                        presence.state = "Editing \(filename)"
+//                    } else {
+//                        presence.state = "Viewing \(filename)"
+//                    }
+                    // I prefer it just saying editing instead of switching between editing and viewing
+                    // will make it toggleable soon™
+                    presence.state = "Editing \(filename)"
                 }
                 
                 let exemptedExtensions = ["scnassests", "xcassets"]

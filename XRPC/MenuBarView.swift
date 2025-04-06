@@ -18,6 +18,7 @@ class MenuBar: NSObject {
     
     // Variable to track if the app is paused
     var isPaused = false
+    var showProjectName = false
     
     // Timer for updating status bar icon periodically
     var statusUpdateTimer: Timer?
@@ -27,7 +28,7 @@ class MenuBar: NSObject {
         // Create the status view
         let statusView = StatusView()
         let topView = NSHostingController(rootView: statusView)
-        topView.view.frame.size = CGSize(width: 200, height: 48)
+        topView.view.frame.size = CGSize(width: 200, height: 64)
         let customMenuItem = NSMenuItem()
         customMenuItem.view = topView.view
         menu.addItem(customMenuItem)
@@ -41,6 +42,16 @@ class MenuBar: NSObject {
                                              keyEquivalent: "p")
         pauseResumeMenuItem.target = self
         menu.addItem(pauseResumeMenuItem)
+        
+        // Add separator to the menu
+        menu.addItem(NSMenuItem.separator())
+        
+        // Add toggle project name menu item
+        let toggleProjectNameMenuItem = NSMenuItem(title: showProjectName ? "Hide Project Name" : "Show Project Name",
+                                                   action: #selector(toggleProjectName),
+                                                   keyEquivalent: "")
+        toggleProjectNameMenuItem.target = self
+        menu.addItem(toggleProjectNameMenuItem)
         
         // Add separator to the menu
         menu.addItem(NSMenuItem.separator())
@@ -87,6 +98,14 @@ class MenuBar: NSObject {
         sender.title = isPaused ? "Resume" : "Pause"
         // Call RPC method to toggle pause/resume
         rpc.togglePauseResume()
+    }
+    
+    // Action to toggle project name visibility
+    @objc func toggleProjectName(sender: NSMenuItem) {
+        showProjectName.toggle()
+        sender.title = showProjectName ? "Hide Project Name" : "Show Project Name"
+        // Call RPC method to toggle project name visibility
+        rpc.toggleProjectName()
     }
     
     // Action to show the about panel

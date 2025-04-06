@@ -49,6 +49,19 @@ struct StatusView: View {
                             .foregroundStyle(.gray)
                     }
                 }
+                
+                // project name
+                HStack {
+                    Text("Project Name")
+                    Spacer()
+                    if rpc.showProjectName {
+                        Image(systemName: "eye.fill")
+                            .foregroundStyle(.gray)
+                    } else {
+                        Image(systemName: "eye.slash.fill")
+                            .foregroundStyle(.gray)
+                    }
+                }
             }
             .frame(maxHeight: .infinity)
             
